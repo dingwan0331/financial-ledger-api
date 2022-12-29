@@ -2,8 +2,9 @@ import json
 
 import bcrypt
 
-from django.views import View
-from django.http  import JsonResponse, HttpResponse
+from django.views      import View
+from django.http       import JsonResponse, HttpResponse
+from django.core.cache import cache
 
 from .models           import User
 from ..util.validators import validate_email, validate_password
@@ -41,5 +42,10 @@ class SignInView(View):
         token = Token()
 
         access_token = token.sign_token(user.id, 'access_token')
+        refresh_token = token.sign_token(user.id, 'refresh_token')
+
+        redis_expire = token.EXPIRES['refresh_token'].total_seconds()
+
+        cache.set(access_token, refresh_token, redis_expire)
 
         return HttpResponse(headers={'Authorization' : access_token}, status = 204)
