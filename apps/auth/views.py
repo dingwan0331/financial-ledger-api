@@ -9,7 +9,7 @@ from django.core.cache import cache
 from .models           import User
 from ..util.validators import validate_email, validate_password
 from ..util.exeptions  import UnauthorizedException
-from ..util.token      import Token
+from ..util.token      import Token, verify_token
 
 class UserView(View):
     def post(self, request):
@@ -49,6 +49,15 @@ class SignInView(View):
         cache.set(access_token, refresh_token, redis_expire)
 
         return HttpResponse(headers={'Authorization' : access_token}, status = 204)
+
+class LogOutView(View):
+    @verify_token
+    def post(self, request):
+        access_token = request.headers.get("Authorization")
+
+        cache.set(access_token, 'logout')
+        
+        return HttpResponse(status = 204)
 
 class TokenView(View):
     def get(self, request):
