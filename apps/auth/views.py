@@ -49,3 +49,19 @@ class SignInView(View):
         cache.set(access_token, refresh_token, redis_expire)
 
         return HttpResponse(headers={'Authorization' : access_token}, status = 204)
+
+class TokenView(View):
+    def get(self, request):
+        access_token  = request.headers.get("Authorization")
+        refresh_token = cache.get(access_token)
+
+        if refresh_token == 'logout':
+            raise UnauthorizedException('Invalid token')
+
+        token   = Token()
+        payload = token.decode_token(refresh_token, 'refresh_token')
+        user_id = payload['id']
+
+        new_access_token = token.sign_token(user_id, 'access_token')
+        
+        return HttpResponse(headers={'Authorization' : new_access_token}, status = 204)
