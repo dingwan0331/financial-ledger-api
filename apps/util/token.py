@@ -68,12 +68,13 @@ def verify_token(func):
         try:
             access_token = request.headers.get("Authorization")
             payload = Token().decode_token(access_token, 'access_token')
+            request.user = {'id' : payload['id']}
 
             refresh_token = cache.get(access_token)
 
             if refresh_token == 'logout':
                 raise UnauthorizedException('Invalid token')
-            
+                
             return func(self, request, *args, **kwargs)
 
         except jwt.exceptions.DecodeError:
