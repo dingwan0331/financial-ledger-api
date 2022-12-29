@@ -53,11 +53,21 @@ class Token:
 
         return token
 
+    def decode_token(self,token, type):
+        try: 
+            return jwt.decode(token, self.SECRET_KEYS[type], 'HS256')
+
+        except jwt.exceptions.DecodeError:
+            raise UnauthorizedException('Invalid token')
+
+        except jwt.exceptions.ExpiredSignatureError:
+            raise UnauthorizedException('Expired token')
+
 def verify_token(func):
     def wrapper(self,request,*args,**kwargs):
         try:
             access_token = request.headers.get("Authorization")
-            payload = jwt.decode(access_token, SECRET_KEY, 'HS256')
+            payload = Token().decode_token(access_token, 'access_token')
 
             refresh_token = cache.get(access_token)
 
@@ -70,6 +80,6 @@ def verify_token(func):
             raise UnauthorizedException('Invalid token')
 
         except jwt.exceptions.ExpiredSignatureError:
-            return UnauthorizedException('Expired token')
+            raise UnauthorizedException('Expired token')
             
     return wrapper
