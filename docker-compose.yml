@@ -32,7 +32,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - .:/api
+      - .:/usr/src/app
     stdin_open: true
     tty: true
     depends_on:
