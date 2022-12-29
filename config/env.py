@@ -8,3 +8,5 @@ MYSQL_DATABASE = os.environ['MYSQL_DATABASE']
 MYSQL_USER     = os.environ['MYSQL_USER']
 MYSQL_HOST     = os.environ['MYSQL_HOST']
 MYSQL_PORT     = os.environ['MYSQL_PORT']
+
+REDIS_URL = os.environ['REDIS_URL']

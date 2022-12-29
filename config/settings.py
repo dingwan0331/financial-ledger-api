@@ -12,7 +12,15 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
-from .env import SECRET_KEY, MYSQL_DATABASE, MYSQL_PASSWORD, MYSQL_USER, MYSQL_HOST, MYSQL_PORT
+from .env import (
+    SECRET_KEY, 
+    MYSQL_DATABASE, 
+    MYSQL_PASSWORD, 
+    MYSQL_USER, 
+    MYSQL_HOST, 
+    MYSQL_PORT, 
+    REDIS_URL
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -116,3 +124,10 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
+CACHES = {  
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL
+    }
+}
