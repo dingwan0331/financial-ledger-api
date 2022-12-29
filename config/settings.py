@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
-from .env import (
+from config.env import (
     SECRET_KEY, 
     MYSQL_DATABASE, 
     MYSQL_PASSWORD, 

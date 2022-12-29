@@ -6,10 +6,10 @@ from django.views      import View
 from django.http       import JsonResponse, HttpResponse
 from django.core.cache import cache
 
-from .models           import User
-from ..util.validators import validate_email, validate_password
-from ..util.exeptions  import UnauthorizedException
-from ..util.token      import Token, verify_token
+from apps.auth.models     import User
+from apps.util.validators import validate_email, validate_password
+from apps.util.exeptions  import UnauthorizedException
+from apps.util.token      import Token, verify_token
 
 class UserView(View):
     def post(self, request):

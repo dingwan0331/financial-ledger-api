@@ -1,6 +1,6 @@
 import re
 
-from .exeptions import BadRequestException
+from apps.util.exeptions import BadRequestException
 
 def validate_email(value):
     EMAIL_REGEX  = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'

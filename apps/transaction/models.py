@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..util.models import TimeStampModel
+from apps.util.models import TimeStampModel
 
 class Transaction(TimeStampModel):
     deposit          = models.IntegerField()
