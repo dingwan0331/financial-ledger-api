@@ -11,9 +11,14 @@ class ResponseExceptionMiddleware:
 
     def process_exception(self, request, exception):
         print(exception)
+
         try:
+            if exception.__class__ == KeyError:
+                return JsonResponse({'message' : 'Key error'}, status=400)
+
             if exception.is_custom:
                 return JsonResponse({'message' : exception.message}, status=exception.status)
 
-        except Exception:
+        except Exception as e:
+            print(e)
             return JsonResponse({'message' : 'Server error'}, status=500)
