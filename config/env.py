@@ -1,6 +1,7 @@
 import os 
 
 SECRET_KEY = os.environ['SECRET_KEY']
+REFRESH_TOKEN_SECRET_KEY = os.environ['REFRESH_TOKEN_SECRET_KEY']
 
 MYSQL_PASSWORD = os.environ['MYSQL_PASSWORD']
 MYSQL_DATABASE = os.environ['MYSQL_DATABASE']
