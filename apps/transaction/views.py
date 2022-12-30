@@ -4,7 +4,11 @@ from django.views import View
 from django.http  import JsonResponse, HttpResponse
 
 from apps.transaction.models import Transaction
-from apps.transaction.dtos   import PostTransactionsDto, PatchTransactionDto
+from apps.transaction.dtos   import (
+    PostTransactionsDto, 
+    PatchTransactionDto, 
+    GetTransactionsDto
+    )
 from apps.util.token         import verify_token
 
 class TransactionsView(View):
@@ -32,6 +36,28 @@ class TransactionsView(View):
         return JsonResponse(
             {'message' : 'Created'},status = 201, headers = {'Location' : location}
             )
+
+    @verify_token
+    def get(self, request):
+        dto = GetTransactionsDto(request.GET)
+
+        transaction_rows = Transaction.objects.get_all(
+            offset = dto.offset,
+            limit  = dto.limit,
+            order  = dto.order,
+            filter = dto.filter
+        )
+
+        result = [
+            {
+                'id'          : transaction_row.id,
+                'deposit'     : transaction_row.deposit,
+                'title'       : transaction_row.title,
+                'created_at'  : datetime.fromtimestamp(transaction_row.created_at)
+            } for transaction_row in transaction_rows
+        ]
+
+        return JsonResponse({'trsnactions' : result}, status = 200)
 
 class TransactionView(View):
     @verify_token

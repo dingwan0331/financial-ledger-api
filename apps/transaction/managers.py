@@ -50,3 +50,11 @@ class TransactionManager(Manager):
 
         except ObjectDoesNotExist:
             raise NotFoundException()
+
+    def get_all(self, **kwargs):
+        filter = kwargs['filter']
+        order  = kwargs['order']
+        offset = kwargs['offset']
+        limit  = kwargs['limit']
+
+        return super().filter(filter).order_by(order)[offset: offset+limit]
