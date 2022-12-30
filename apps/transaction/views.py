@@ -15,17 +15,13 @@ class TransactionsView(View):
     @verify_token
     def post(self, request):
         dto = PostTransactionsDto(request.body)
-        
-        deposit     = dto.deposit
-        title       = dto.title
-        description = dto.description
 
         user_id = request.user['id']
         
         transaction_row = Transaction.objects.create(
-            deposit     = deposit,
-            title       = title,
-            description = description,
+            deposit     = dto.deposit,
+            title       = dto.title,
+            description = dto.description,
             user_id     = user_id
         )
 
@@ -63,19 +59,15 @@ class TransactionView(View):
     @verify_token
     def patch(self, request, transaction_id):
         dto = PatchTransactionDto(request.body)
-
-        deposit     = dto.deposit
-        title       = dto.title
-        description = dto.description
-
+        
         user_id = request.user['id']
 
         transaction_row = Transaction.objects.update(
-            transaction_id = transaction_id,
-            deposit        = deposit,
-            title          = title,
-            description    = description,
-            user_id        = user_id
+            deposit        = dto.deposit,
+            title          = dto.title,
+            description    = dto.description,
+            user_id        = user_id,
+            transaction_id = transaction_id
         )
 
         return HttpResponse(status = 204)
