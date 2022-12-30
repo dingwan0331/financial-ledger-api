@@ -35,7 +35,8 @@ class TransactionsView(View):
 
     @verify_token
     def get(self, request):
-        dto = GetTransactionsDto(request.GET)
+        user_id = request.user['id']
+        dto = GetTransactionsDto(request.GET, user_id)
 
         transaction_rows = Transaction.objects.get_all(
             offset = dto.offset,

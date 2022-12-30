@@ -70,12 +70,12 @@ class GetTransactionsDto:
         'expenditure' : Q(deposit__lt = 0)
     }
     
-    def __init__(self, request_query):
+    def __init__(self, request_query, user_id):
         self.order             = request_query.get('order', '-created_at')
         self._transaction_type = request_query.get('transaction-type', 'all')
         self.offset            = request_query.get('offset', '0')
         self.limit             = request_query.get('limit', '30')
-        self.filter            = Q()
+        self.filter            = Q(user_id = user_id)
 
         self._validate_order()
         self._validate_is_income()
