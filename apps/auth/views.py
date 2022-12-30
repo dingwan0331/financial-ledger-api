@@ -71,7 +71,7 @@ class TokenView(View):
         new_access_token = token.sign_token(user_id, 'access_token')    
         new_expire       = cache.ttl(access_token)
 
-        cache.set(access_token, new_access_token, new_expire)
+        cache.set(new_access_token, refresh_token, new_expire)
         cache.delete(access_token)
         
         return HttpResponse(headers={'Authorization' : new_access_token}, status = 204)
