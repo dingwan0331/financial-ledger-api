@@ -52,7 +52,9 @@ class LogOutView(View):
     def post(self, request):
         access_token = request.headers.get("Authorization")
 
-        cache.set(access_token, 'logout')
+        REDIS_LOG_OUT_EXPIRE = Token().EXPIRES['access_token'].total_seconds()
+
+        cache.set(access_token, 'logout', REDIS_LOG_OUT_EXPIRE)
         
         return HttpResponse(status = 204)
 
@@ -60,7 +62,7 @@ class TokenView(View):
     def get(self, request):
         access_token  = request.headers.get("Authorization")
         refresh_token = cache.get(access_token)
-        
+
         token   = Token()
         payload = token.decode_token(refresh_token, 'refresh_token')
         user_id = payload['id']
