@@ -5,9 +5,13 @@
 # 주요 기술 및 버젼
 
 python = 3.9
+
 Django = 4.1.4
+
 mysql = 5.7
+
 redis = alpine (도커 이미지)
+
 docker-compose = 1.29.2
 
 # 프로젝트 실행방법
