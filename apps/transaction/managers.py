@@ -67,6 +67,25 @@ class TransactionManager(Manager):
         except ObjectDoesNotExist:
             raise NotFoundException()
 
+        
+    def get(self, transaction_id):
+        try: 
+            transaction_row = super().get(id = transaction_id) 
+
+            result = {
+                    'id'          : transaction_row.id,
+                    'deposit'     : transaction_row.deposit,
+                    'title'       : transaction_row.title,
+                    'description' : transaction_row.description,
+                    'created_at'  : datetime.fromtimestamp(transaction_row.created_at),
+                    'updated_at'  : datetime.fromtimestamp(transaction_row.updated_at)
+            }
+            
+            return result
+
+        except ObjectDoesNotExist:
+            raise NotFoundException()
+
     def get_all(self, **kwargs):
         filter = kwargs['filter']
         order  = kwargs['order']
@@ -83,4 +102,5 @@ class TransactionManager(Manager):
                 'created_at'  : datetime.fromtimestamp(transaction_row.created_at)
             } for transaction_row in transaction_rows
         ]
+
         return result
