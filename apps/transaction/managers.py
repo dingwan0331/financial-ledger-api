@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models       import Manager
 from django.db              import transaction
 from django.core.exceptions import ObjectDoesNotExist
@@ -47,10 +49,20 @@ class TransactionManager(Manager):
     def get_from_self(self, transaction_id, user_id):
         try: 
             transaction_row = super().get(id = transaction_id)
+
             if transaction_row.user_id != user_id:
-                raise PermissionError()
+                raise PermissionError()            
+
+            result = {
+                    'id'          : transaction_row.id,
+                    'deposit'     : transaction_row.deposit,
+                    'title'       : transaction_row.title,
+                    'description' : transaction_row.description,
+                    'created_at'  : datetime.fromtimestamp(transaction_row.created_at),
+                    'updated_at'  : datetime.fromtimestamp(transaction_row.updated_at)
+            }
             
-            return transaction_row
+            return result
 
         except ObjectDoesNotExist:
             raise NotFoundException()
@@ -61,4 +73,14 @@ class TransactionManager(Manager):
         offset = kwargs['offset']
         limit  = kwargs['limit']
 
-        return super().filter(filter).order_by(order)[offset: offset+limit]
+        transaction_rows = super().filter(filter).order_by(order)[offset: offset+limit]
+
+        result = [
+            {
+                'id'          : transaction_row.id,
+                'deposit'     : transaction_row.deposit,
+                'title'       : transaction_row.title,
+                'created_at'  : datetime.fromtimestamp(transaction_row.created_at)
+            } for transaction_row in transaction_rows
+        ]
+        return result

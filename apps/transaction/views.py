@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.views import View
 from django.http  import JsonResponse, HttpResponse
 
@@ -9,7 +7,7 @@ from apps.transaction.dtos   import (
     PatchTransactionDto, 
     GetTransactionsDto
     )
-from apps.util.token         import verify_token
+from apps.util.token import verify_token
 
 class TransactionsView(View):
     @verify_token
@@ -45,16 +43,7 @@ class TransactionsView(View):
             filter = dto.filter
         )
 
-        result = [
-            {
-                'id'          : transaction_row.id,
-                'deposit'     : transaction_row.deposit,
-                'title'       : transaction_row.title,
-                'created_at'  : datetime.fromtimestamp(transaction_row.created_at)
-            } for transaction_row in transaction_rows
-        ]
-
-        return JsonResponse({'trsnactions' : result}, status = 200)
+        return JsonResponse({'trsnactions' : transaction_rows}, status = 200)
 
 class TransactionView(View):
     @verify_token
@@ -90,13 +79,4 @@ class TransactionView(View):
 
         transaction_row = Transaction.objects.get_from_self(transaction_id, user_id)
 
-        result = {
-                'id'          : transaction_row.id,
-                'deposit'     : transaction_row.deposit,
-                'title'       : transaction_row.title,
-                'description' : transaction_row.description,
-                'created_at'  : datetime.fromtimestamp(transaction_row.created_at),
-                'updated_at'  : datetime.fromtimestamp(transaction_row.updated_at)
-        }
-
-        return JsonResponse({'transaction' : result}, status = 200)
+        return JsonResponse({'transaction' : transaction_row}, status = 200)
