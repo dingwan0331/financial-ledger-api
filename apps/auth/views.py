@@ -60,10 +60,7 @@ class TokenView(View):
     def get(self, request):
         access_token  = request.headers.get("Authorization")
         refresh_token = cache.get(access_token)
-
-        if refresh_token == 'logout':
-            raise UnauthorizedException('Invalid token')
-
+        
         token   = Token()
         payload = token.decode_token(refresh_token, 'refresh_token')
         user_id = payload['id']
