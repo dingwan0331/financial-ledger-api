@@ -7,10 +7,9 @@ from django.http       import JsonResponse, HttpResponse
 from django.core.cache import cache
 
 from apps.auth.models     import User
-from apps.util.validators import validate_email, validate_password
-from apps.util.exeptions  import UnauthorizedException
+from apps.util.exeptions  import UnauthorizedException, BadRequestException
 from apps.util.token      import Token, verify_token
-from apps.auth.dtos       import PostUsersDto
+from apps.auth.dtos       import PostUsersDto, SignInDto
 
 class UserView(View):
     def post(self, request):
@@ -30,16 +29,12 @@ class UserView(View):
 
 class SignInView(View):
     def post(self, request):
-        body     = json.loads(request.body)
-        email    = body['email']
-        password = body['password']
+        dto = SignInDto(request.body)
 
-        validate_email(email)
+        user = User.objects.get_by_email(dto.email)
 
-        user = User.objects.get_by_email(email)
-
-        if not bcrypt.checkpw(password.encode('utf-8'), user.password):
-            raise UnauthorizedException('Invalid password')
+        if not bcrypt.checkpw(dto.password.encode('utf-8'), user.password):
+            raise BadRequestException('Invalid password')
 
         token = Token()
 
