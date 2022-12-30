@@ -44,9 +44,13 @@ class TransactionManager(Manager):
         except ObjectDoesNotExist:
             raise NotFoundException()
 
-    def get(self, transaction_id):
-        try:
-            return super().get(id = transaction_id)
+    def get_from_self(self, transaction_id, user_id):
+        try: 
+            transaction_row = super().get(id = transaction_id)
+            if transaction_row.user_id != user_id:
+                raise PermissionError()
+            
+            return transaction_row
 
         except ObjectDoesNotExist:
             raise NotFoundException()

@@ -86,8 +86,9 @@ class TransactionView(View):
 
     @verify_token
     def get(self, request, transaction_id):
+        user_id = request.user['id']
 
-        transaction_row = Transaction.objects.get(transaction_id)
+        transaction_row = Transaction.objects.get_from_self(transaction_id, user_id)
 
         result = {
                 'id'          : transaction_row.id,
