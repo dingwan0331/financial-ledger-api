@@ -67,7 +67,8 @@ class PatchTransactionDto:
 class GetTransactionsDto:
     _filter_set = {
         'income'      : Q(deposit__gt = 0),
-        'expenditure' : Q(deposit__lt = 0)
+        'expenditure' : Q(deposit__lt = 0),
+        'all'         : Q()
     }
     
     def __init__(self, request_query, user_id):
@@ -96,9 +97,6 @@ class GetTransactionsDto:
             raise BadRequestException('Invalid transaction type')
 
     def _set_filter(self):
-        if self._transaction_type == 'all':
-            return
-
         self.filter &= self._filter_set[self._transaction_type]
 
     def _set_offset(self):
