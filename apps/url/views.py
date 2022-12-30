@@ -9,7 +9,7 @@ from apps.util.token import verify_token
 
 class TransactionSignedUrlView(View):
     @verify_token
-    def post(self, request, transaction_id):
+    def get(self, request, transaction_id):
         redis     = get_redis_connection('signed_url')
         uuid_path = uuid.uuid4()
 
@@ -19,4 +19,4 @@ class TransactionSignedUrlView(View):
 
         redis.set(signed_url, redirect_url, REDIS_EXPIRE)
 
-        return JsonResponse({'signed_url' : signed_url}, status = 201)
+        return JsonResponse({'signed_url' : signed_url}, status = 200)
