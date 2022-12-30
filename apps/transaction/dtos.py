@@ -33,7 +33,7 @@ class PostTransactionsDto:
         if not re.fullmatch(DEPOSIT_REGEX, self.deposit):
             raise BadRequestException('Invalid deposit')
 
-class PatchTransactionsDto:
+class PatchTransactionDto:
     def __init__(self, request_body):
         request_body = json.loads(request_body)
 

@@ -4,7 +4,7 @@ from django.views import View
 from django.http  import JsonResponse, HttpResponse
 
 from apps.transaction.models import Transaction
-from apps.transaction.dtos   import PostTransactionsDto, PatchTransactionsDto
+from apps.transaction.dtos   import PostTransactionsDto, PatchTransactionDto
 from apps.util.token         import verify_token
 
 class TransactionsView(View):
@@ -36,7 +36,7 @@ class TransactionsView(View):
 class TransactionView(View):
     @verify_token
     def patch(self, request, transaction_id):
-        dto = PatchTransactionsDto(request.body)
+        dto = PatchTransactionDto(request.body)
 
         deposit     = dto.deposit
         title       = dto.title
