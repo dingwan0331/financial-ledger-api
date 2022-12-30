@@ -72,7 +72,7 @@ class GetTransactionsDto:
     }
     
     def __init__(self, request_query, user_id):
-        self.order             = request_query.get('order', '-created_at')
+        self.order             = request_query.get('order', '-created-at')
         self._transaction_type = request_query.get('transaction-type', 'all')
         self.offset            = request_query.get('offset', '0')
         self.limit             = request_query.get('limit', '30')
@@ -85,7 +85,7 @@ class GetTransactionsDto:
         self._set_filter()
 
     def _validate_order(self):
-        _ORDER_LIST = ['-created_at', 'created_at']
+        _ORDER_LIST = ['-created-at', 'created-at']
 
         if self.order not in _ORDER_LIST:
             raise BadRequestException('Invalid order')
