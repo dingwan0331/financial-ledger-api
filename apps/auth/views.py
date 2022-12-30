@@ -10,21 +10,23 @@ from apps.auth.models     import User
 from apps.util.validators import validate_email, validate_password
 from apps.util.exeptions  import UnauthorizedException
 from apps.util.token      import Token, verify_token
+from apps.auth.dtos       import PostUsersDto
 
 class UserView(View):
     def post(self, request):
-        body     = json.loads(request.body)
-        email    = body['email']
-        password = body['password']
-
-        validate_email(email)
-        validate_password(password)
+        dto      = PostUsersDto(request.body)
+        password = dto.password
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        user = User.objects.create(email=email, password=hashed_password)
+        user = User.objects.create(email = dto.email, password = hashed_password)
+
+        user_id  = user.id
+        location = f'/users/{user_id}'
         
-        return JsonResponse({'message' : 'Created'}, status = 201)
+        return JsonResponse(
+            {'message' : 'Created'}, status = 201, headers = {'Location' : location}
+            )
 
 class SignInView(View):
     def post(self, request):
