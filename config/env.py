@@ -9,4 +9,5 @@ MYSQL_USER     = os.environ['MYSQL_USER']
 MYSQL_HOST     = os.environ['MYSQL_HOST']
 MYSQL_PORT     = os.environ['MYSQL_PORT']
 
-REDIS_URL = os.environ['REDIS_URL']
+TOKEN_REDIS_URL      = os.environ['TOKEN_REDIS_URL']
+SIGNED_URL_REDIS_URL = os.environ['SIGNED_URL_REDIS_URL']

@@ -19,7 +19,8 @@ from config.env import (
     MYSQL_USER, 
     MYSQL_HOST, 
     MYSQL_PORT, 
-    REDIS_URL
+    TOKEN_REDIS_URL,
+    SIGNED_URL_REDIS_URL
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -126,8 +127,12 @@ CORS_ALLOW_HEADERS = (
 )
 
 CACHES = {  
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': TOKEN_REDIS_URL
+    },
+    'signed_url': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': SIGNED_URL_REDIS_URL
     }
 }
