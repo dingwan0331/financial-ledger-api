@@ -5,8 +5,8 @@ from django.http      import JsonResponse
 
 from django_redis import get_redis_connection
 
-from apps.util.token     import verify_token
-from apps.util.exeptions import NotFoundException
+from apps.util.token         import verify_token
+from apps.util.exeptions     import NotFoundException
 from apps.transaction.models import Transaction
 
 redis = get_redis_connection('signed_url')
@@ -14,6 +14,10 @@ redis = get_redis_connection('signed_url')
 class TransactionSignedUrlView(View):
     @verify_token
     def get(self, request, transaction_id):
+        user_id = request.user['id']
+        
+        Transaction.objects.get_from_self(transaction_id, user_id)
+        
         uuid_path = uuid.uuid4()
 
         signed_url   = f'/urls/transactions/{uuid_path}'
