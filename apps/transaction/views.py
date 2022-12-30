@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.views import View
 from django.http  import JsonResponse, HttpResponse
 
@@ -34,7 +36,7 @@ class TransactionsView(View):
 class TransactionView(View):
     @verify_token
     def patch(self, request, transaction_id):
-        dto            = PatchTransactionsDto(request.body)
+        dto = PatchTransactionsDto(request.body)
 
         deposit     = dto.deposit
         title       = dto.title
@@ -62,3 +64,19 @@ class TransactionView(View):
         )
 
         return HttpResponse(status = 204)
+
+    @verify_token
+    def get(self, request, transaction_id):
+
+        transaction_row = Transaction.objects.get(transaction_id)
+
+        result = {
+                'id'          : transaction_row.id,
+                'deposit'     : transaction_row.deposit,
+                'title'       : transaction_row.title,
+                'description' : transaction_row.description,
+                'created_at'  : datetime.fromtimestamp(transaction_row.created_at),
+                'updated_at'  : datetime.fromtimestamp(transaction_row.updated_at)
+        }
+
+        return JsonResponse({'transaction' : result}, status = 200)

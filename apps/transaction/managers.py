@@ -43,3 +43,10 @@ class TransactionManager(Manager):
             return transaction_row.delete()
         except ObjectDoesNotExist:
             raise NotFoundException()
+
+    def get(self, transaction_id):
+        try:
+            return super().get(id = transaction_id)
+
+        except ObjectDoesNotExist:
+            raise NotFoundException()
