@@ -51,3 +51,14 @@ class TransactionView(View):
         )
 
         return HttpResponse(status = 204)
+
+    @verify_token
+    def delete(self, request, transaction_id):
+        user_id = request.user['id']
+
+        transaction_row = Transaction.objects.delete(
+            transaction_id = transaction_id,
+            user_id        = user_id
+        )
+
+        return HttpResponse(status = 204)

@@ -31,3 +31,15 @@ class TransactionManager(Manager):
             return transaction_row.save()
         except ObjectDoesNotExist:
             raise NotFoundException()
+
+    def delete(self, user_id, transaction_id):
+        try:
+            with transaction.atomic():
+                transaction_row = super().get(id = transaction_id)
+
+                if transaction_row.user_id != user_id:
+                    raise ForbiddenException()
+
+            return transaction_row.delete()
+        except ObjectDoesNotExist:
+            raise NotFoundException()
