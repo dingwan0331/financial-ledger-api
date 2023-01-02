@@ -70,6 +70,11 @@ class GetTransactionsDto:
         'expenditure' : Q(deposit__lt = 0),
         'all'         : Q()
     }
+
+    _order_set = {
+        '-created-at' : '-created_at',
+        'created-at'  : 'created_at'
+    }
     
     def __init__(self, request_query, user_id):
         self.order             = request_query.get('order', '-created-at')
@@ -83,6 +88,10 @@ class GetTransactionsDto:
         self._set_offset()
         self._set_limit()
         self._set_filter()
+        self._set_order()
+
+    def _set_order(self):
+        self.order = self._order_set[self.order]
 
     def _validate_order(self):
         _ORDER_LIST = ['-created-at', 'created-at']
