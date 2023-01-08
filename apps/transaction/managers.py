@@ -52,7 +52,7 @@ class TransactionManager(Manager):
             transaction_row = super().get(id = transaction_id)
 
             if transaction_row.user_id != user_id:
-                raise PermissionError()            
+                raise ForbiddenException()            
 
             result = {
                     'id'          : transaction_row.id,
