@@ -28,7 +28,7 @@ class TransactionManager(Manager):
 
                 transaction_row.description = description
                 transaction_row.title       = title
-                transaction_row.deposi      = deposit 
+                transaction_row.deposit     = deposit 
                 transaction_row.updated_at  = datetime.now().timestamp()
 
             return transaction_row.save()
