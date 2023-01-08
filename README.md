@@ -49,6 +49,7 @@ python manage.py migrate
 
 - 13306, ,16379, 8000 포트가 이미 사용중일 시 실행이 안됩니다.
 - .env에 한개의 key라도 부족할 시 KeyError가 납니다.
+- m1칩 사용 시 docker-compose의 27번째 줄 주석처리를 제거 후 사용하여야 합니다.
 
 # 프로젝트 폴더 구조
 
