@@ -23,6 +23,8 @@ services:
       - --collation-server=utf8mb4_unicode_ci
     volumes:
       - /var/lib/mysql
+    # m1칩의 경우 아래의 주석을 제거 후 사용하시기 바랍니다.
+    # platform: linux/amd64
 
   api:
     build:
